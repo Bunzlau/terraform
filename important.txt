@@ -1,31 +1,31 @@
 1. Czy subnet musi byc podpi?ty pod route table aby dzia?a? poprawnie?
 Tak, subnet musi by? podpi?ty pod route table, aby dzia?a? poprawnie.
- Route table definiuje zasady routingu dla ruchu sieciowego w danym subnecie, okre?laj?c, jak pakiety danych s? kierowane do ró?nych celów w sieci.
-  Bez przypisanego route table, subnet nie b?dzie mia? informacji o tym, jak obs?ugiwa? ruch sieciowy, co mo?e prowadzi? do problemów z komunikacj? wewn?trz sieci oraz z dost?pem do zasobów zewn?trznych.
+ Route table definiuje zasady routingu dla ruchu sieciowego w danym subnecie, okre?laj?c, jak pakiety danych s? kierowane do rï¿½?nych celï¿½w w sieci.
+  Bez przypisanego route table, subnet nie b?dzie mia? informacji o tym, jak obs?ugiwa? ruch sieciowy, co mo?e prowadzi? do problemï¿½w z komunikacj? wewn?trz sieci oraz z dost?pem do zasobï¿½w zewn?trznych.
 Defaultowo ka?dy subnet jest automatycznie przypisany do domy?lnej route table VPC, chyba ?e zostanie przypisany inny route table.
 
-Public subnet vs Private subnet - jaka jest ró?nica?
-Public subnet to taki, który ma tras? do Internetu za po?rednictwem bramy internetowej (Internet Gateway). Zasoby umieszczone w publicznym subnecie, takie jak serwery WWW, mog? bezpo?rednio komunikowa? si? z Internetem i by?
-dost?pne z zewn?trz. Publiczne subnets s? cz?sto u?ywane do hostowania zasobów, które musz? by? dost?pne publicznie.  Private subnet to taki, który nie ma bezpo?redniej trasy do Internetu. Zasoby umieszczone w prywatnym subnecie, takie jak bazy danych czy serwery aplikacji, s? izolowane od bezpo?redniego dost?pu z Internetu.
-  Zamiast tego, komunikacja z Internetem odbywa si? za po?rednictwem mechanizmów takich jak NAT Gateway lub NAT Instance, które umo?liwiaj? zasobom w prywatnym subnecie inicjowanie po??cze? wychodz?cych do Internetu, ale nie pozwalaj? na bezpo?redni dost?p z zewn?trz.  G?ówna ró?nica mi?dzy publicznym a prywatnym subnetem polega na poziomie dost?pu do Internetu i sposobie zarz?dzania ruchem sieciowym.
+Public subnet vs Private subnet - jaka jest rï¿½?nica?
+Public subnet to taki, ktï¿½ry ma tras? do Internetu za po?rednictwem bramy internetowej (Internet Gateway). Zasoby umieszczone w publicznym subnecie, takie jak serwery WWW, mog? bezpo?rednio komunikowa? si? z Internetem i by?
+dost?pne z zewn?trz. Publiczne subnets s? cz?sto u?ywane do hostowania zasobï¿½w, ktï¿½re musz? by? dost?pne publicznie.  Private subnet to taki, ktï¿½ry nie ma bezpo?redniej trasy do Internetu. Zasoby umieszczone w prywatnym subnecie, takie jak bazy danych czy serwery aplikacji, s? izolowane od bezpo?redniego dost?pu z Internetu.
+  Zamiast tego, komunikacja z Internetem odbywa si? za po?rednictwem mechanizmï¿½w takich jak NAT Gateway lub NAT Instance, ktï¿½re umo?liwiaj? zasobom w prywatnym subnecie inicjowanie po??cze? wychodz?cych do Internetu, ale nie pozwalaj? na bezpo?redni dost?p z zewn?trz.  G?ï¿½wna rï¿½?nica mi?dzy publicznym a prywatnym subnetem polega na poziomie dost?pu do Internetu i sposobie zarz?dzania ruchem sieciowym.
 
-  ?? Subnet publiczny = subnet, który:
+  ?? Subnet publiczny = subnet, ktï¿½ry:
 
   ma route 0.0.0.0/0 ? IGW
 
-  ?? Subnet prywatny = subnet, który:
+  ?? Subnet prywatny = subnet, ktï¿½ry:
 
   nie ma tej trasy
 
   albo ma NAT Gateway zamiast IGW
 
   2. Czy Internet Gateway musi mie? zawsze Route Table?
-Nie, Internet Gateway (IGW) nie musi mie? zawsze przypisanego Route Table. IGW jest zasobem, który umo?liwia komunikacj? mi?dzy instancjami w VPC a Internetem.
+Nie, Internet Gateway (IGW) nie musi mie? zawsze przypisanego Route Table. IGW jest zasobem, ktï¿½ry umo?liwia komunikacj? mi?dzy instancjami w VPC a Internetem.
 Jednak to Route Table definiuje, jak ruch sieciowy jest kierowany w VPC, w tym do i z IGW.  Aby zasoby w publicznym subnecie mog?y komunikowa? si? z Internetem, odpowiednia trasa (
 
 ? 2. Czy Internet Gateway musi mie? zawsze Route Table?
 Internet Gateway NICZEGO nie robi sam z siebie.
-Musi istnie? route, który na niego wskazuje.
+Musi istnie? route, ktï¿½ry na niego wskazuje.
 
 Flow pakietu sieciowego od
 Internet
@@ -43,5 +43,10 @@ Security Group
 EC2
 
 Kto mo?e mie? security groupw w AWS?
-Ka?dy zasób w AWS, który obs?uguje security groups, mo?e mie? przypisan? security group. Najcz??ciej u?ywane zasoby to instancje EC2, bazy danych RDS, load balancery (ELB), funkcje Lambda (je?li s? uruchamiane w VPC) oraz kontenery ECS.
- Security groups dzia?aj? jako wirtualne zapory sieciowe, kontroluj?c ruch przychodz?cy i wychodz?cy do tych zasobów.
+Ka?dy zasï¿½b w AWS, ktï¿½ry obs?uguje security groups, mo?e mie? przypisan? security group. Najcz??ciej u?ywane zasoby to instancje EC2, bazy danych RDS, load balancery (ELB), funkcje Lambda (je?li s? uruchamiane w VPC) oraz kontenery ECS.
+ Security groups dzia?aj? jako wirtualne zapory sieciowe, kontroluj?c ruch przychodz?cy i wychodz?cy do tych zasobï¿½w.
+
+ Co to jest ARN i kto go moÅ¼e mieÄ‡ w AWS?
+ARN (Amazon Resource Name) to unikalny identyfikator zasobu w AWS.
+  Ka?dy zasÃ³b w AWS, taki jak instancje EC2, bazy danych RDS, bucket S3, funkcje Lambda, itp., ma przypisany swï¿½j w?asny ARN.
+  ARN sk?ada si? z kilku elementï¿½w, takich jak: typ us?ugi, region, konto AWS oraz unikalny identyfikator zasobu.

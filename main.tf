@@ -103,7 +103,7 @@ resource "aws_security_group" "ec2_sg" {
   description = "Allow traffic from ALB"
   vpc_id      = aws_vpc.main.id
 
-  // mo?na definiowa? wiele ingress blok�w. Dobre praktyki, to mie? osobny blok na ka?dy typ ruchu np HTTP, SSH itp.
+  // mo?na definiowa? wiele ingress blok�w. Dobre praktyki, to mie? osobny blok na ka?dy typ ruchu np HTTP, SSH itp.
   ingress {
     description = "HTTP from ALB"
     from_port   = 80
@@ -154,7 +154,7 @@ resource "aws_instance" "ec2_az1"{
   ami = data.aws_ami.amazon_linux.id
   instance_type = "t3.micro"
   subnet_id = aws_subnet.public_az1.id
-  //key_name = aws_subnet.public_az1.id
+  key_name = "ha-key"
   vpc_security_group_ids = [
     aws_security_group.ec2_sg.id
   ]
@@ -168,10 +168,68 @@ resource "aws_instance" "ec2_z2"{
   ami = data.aws_ami.amazon_linux.id
   instance_type = "t3.micro"
   subnet_id = aws_subnet.public_az2.id
-  //key_name = aws_subnet.public_az2.id
+  key_name = "ha-key"
   vpc_security_group_ids = [
   aws_security_group.ec2_sg.id]
   tags = {
     Name = "ec2_instance_az2"
   }
+}
+
+//tworzymy TARGET GROUP dla ALB. PO HTTP GET
+resource "aws_lb_target_group" "tg" {
+  name = "lb-tg"
+  port = 80
+  protocol = "HTTP"
+  vpc_id = aws_vpc.main.id
+
+  health_check {
+    path = "/"
+    port = "80"
+  }
+
+  tags = {
+    Name = "alb_target_group"
+  }
+}
+
+//Podpięcie EC2 do TARGET GROUPS
+resource "aws_lb_target_group_attachment" "az1" {
+  target_group_arn = aws_lb_target_group.tg.arn
+  target_id        = aws_instance.ec2_az1.id
+  port             = 80
+}
+
+resource "aws_lb_target_group_attachment" "az2" {
+  target_group_arn = aws_lb_target_group.tg.arn
+  target_id        = aws_instance.ec2_z2.id
+    port             = 80
+}
+
+//tworzymy Application Load Balancer
+resource "aws_lb" "alb" {
+  name = "ha-lb"
+  load_balancer_type = "application"
+  //internal znaczy czy ALB bedzie mial publiczny IP czy nie
+  internal = false
+
+  subnets = [
+  aws_subnet.public_az1.id,
+  aws_subnet.public_az2.id]
+
+  security_groups = [aws_security_group.alb_sg.id]
+}
+
+//listener dla ALB, żeby przekierowywał ruch do target group
+resource "aws_lb_listener" "http" {
+  load_balancer_arn = aws_lb.alb.arn
+  port = 80
+    protocol = "HTTP"
+
+  // definiujemy co ma sie stac z ruchem przychodzacym na listenera
+    default_action {
+        type = "forward"
+        target_group_arn = aws_lb_target_group.tg.arn
+    }
+
 }
