@@ -7,5 +7,5 @@ terraform {
   }
 }
 provider "aws" {
-  region = "eu-west-1" # Ireland
+  region = var.region # use variable-driven region so dev/stg can differ
 }
