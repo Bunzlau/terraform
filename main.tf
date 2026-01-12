@@ -1,14 +1,3 @@
-terraform {
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "5.54.1"
-    }
-  }
-}
-provider "aws" {
-  region = "eu-west-1" # Ireland
-}
 
 //tworzymy VPC
 resource "aws_vpc" "main" {
