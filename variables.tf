@@ -163,3 +163,8 @@ variable "map_public_ip_on_launch" {
   type        = bool
   description = "Whether to auto-assign public IPs on subnet launch"
 }
+
+variable "environment" {
+  type        = string
+  description = "Deployment environment (e.g. dev, prod)"
+}

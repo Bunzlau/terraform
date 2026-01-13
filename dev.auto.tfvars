@@ -7,6 +7,7 @@ public_route_table = "demo-public-rt"
 
 default_route_cidr = "0.0.0.0/0"
 
+environment = "dev"
 
 public_subnet_az1_name = "demo-public-az1"
 public_subnet_az1_cidr = "10.0.1.0/24"
