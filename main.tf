@@ -1,5 +1,3 @@
-
-//tworzymy VPC
 resource "aws_vpc" "main" {
   cidr_block = var.vpc_cidr
 
@@ -8,7 +6,6 @@ resource "aws_vpc" "main" {
   }
 }
 
-//tworzymy Internet Gateway z przypisaniem do VPC
 resource "aws_internet_gateway" "gw" {
   vpc_id = aws_vpc.main.id
 
@@ -16,12 +13,11 @@ resource "aws_internet_gateway" "gw" {
     Name = var.internet_gateway
   }
 }
-//tworzymy Egress Only Internet Gateway z przypisaniem do VPC
 resource "aws_route_table" "public" {
   vpc_id = aws_vpc.main.id
 
   route {
-    cidr_block = "0.0.0.0/0"
+    cidr_block = var.default_route_cidr
     gateway_id = aws_internet_gateway.gw.id
   }
 
@@ -30,32 +26,29 @@ resource "aws_route_table" "public" {
   }
 }
 
-//tworzymy publiczne subnets w dwoch AZ
 resource "aws_subnet" "public_az1" {
   vpc_id = aws_vpc.main.id
   cidr_block = var.public_subnet_az1_cidr
   availability_zone = var.public_subnet_az1_az
   // potrzebne do automatycznego przypisywania publicznych IP do instancji w tym subnecie
-  map_public_ip_on_launch = true
+  map_public_ip_on_launch = var.map_public_ip_on_launch
 
     tags = {
     Name = var.public_subnet_az1_name
   }
 }
 
-//tworzymy publiczne subnets w dwoch AZ
 resource "aws_subnet" "public_az2" {
   vpc_id = aws_vpc.main.id
   cidr_block = var.public_subnet_az2_cidr
   availability_zone = var.public_subnet_az2_az
-  map_public_ip_on_launch = true
+  map_public_ip_on_launch = var.map_public_ip_on_launch
 
   tags = {
     Name = var.public_subnet_az2_name
   }
 }
 
-//bez tego subnet nie ma internetu, laczymy route table z subnetami
 resource "aws_route_table_association" "az1" {
   route_table_id = aws_route_table.public.id
     subnet_id      = aws_subnet.public_az1.id
@@ -66,7 +59,6 @@ resource "aws_route_table_association" "az2" {
     subnet_id      = aws_subnet.public_az2.id
 }
 
-//tworzymy security group dla ALB z regu?a na HTTP (80) inbound
 resource "aws_security_group" "alb_sg" {
   name        =  var.alb_security_group
   description = "Allow HTTP inbound traffic"
@@ -77,13 +69,13 @@ resource "aws_security_group" "alb_sg" {
     from_port   = var.http_port
     to_port     = var.http_port
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = var.ingress_cidrs
   }
   egress {
     from_port = 0
     to_port   = 0
     protocol  = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = var.egress_cidrs
   }
 }
 
@@ -106,14 +98,14 @@ resource "aws_security_group" "ec2_sg" {
     from_port   = var.ssh_port
     to_port     = var.ssh_port
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = var.ssh_allowed_cidrs
   }
 
   egress {
     from_port = 0
     to_port   = 0
     protocol  = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = var.egress_cidrs
 
   }
 }
@@ -125,15 +117,15 @@ data "aws_ami" "amazon_linux" {
 
   filter {
     name   = "name"
-    values = ["amzn2-ami-hvm-*-x86_64-gp2"]
+    values = [var.ami_name_filter]
   }
 
   filter {
     name   = "virtualization-type"
-    values = ["hvm"]
+    values = [var.ami_virtualization]
   }
 
-  owners = ["amazon"] // Amazon
+  owners = var.ami_owners // Owners for AMI lookup
 }
 
 //public IP dostanie z subnetu
@@ -165,15 +157,14 @@ resource "aws_instance" "ec2_z2"{
   }
 }
 
-//tworzymy TARGET GROUP dla ALB. PO HTTP GET
 resource "aws_lb_target_group" "tg" {
   name = var.tg_name
   port = var.http_port
-  protocol = "HTTP"
+  protocol = var.alb_protocol
   vpc_id = aws_vpc.main.id
 
   health_check {
-    path = "/"
+    path = var.health_check_path
     port = var.http_port_string
   }
 
@@ -182,7 +173,6 @@ resource "aws_lb_target_group" "tg" {
   }
 }
 
-//Podpięcie EC2 do TARGET GROUPS
 resource "aws_lb_target_group_attachment" "az1" {
   target_group_arn = aws_lb_target_group.tg.arn
   target_id        = aws_instance.ec2_az1.id
@@ -195,12 +185,11 @@ resource "aws_lb_target_group_attachment" "az2" {
     port             = var.http_port
 }
 
-//tworzymy Application Load Balancer
 resource "aws_lb" "alb" {
   name = var.alb_name
-  load_balancer_type = "application"
+  load_balancer_type = var.alb_type
   //internal znaczy czy ALB bedzie mial publiczny IP czy nie
-  internal = false
+  internal = var.alb_internal
 
   subnets = [
   aws_subnet.public_az1.id,
@@ -209,11 +198,10 @@ resource "aws_lb" "alb" {
   security_groups = [aws_security_group.alb_sg.id]
 }
 
-//listener dla ALB, żeby przekierowywał ruch do target group
 resource "aws_lb_listener" "http" {
   load_balancer_arn = aws_lb.alb.arn
   port = var.http_port
-    protocol = "HTTP"
+    protocol = var.alb_protocol
 
   // definiujemy co ma sie stac z ruchem przychodzacym na listenera
     default_action {

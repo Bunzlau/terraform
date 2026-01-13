@@ -5,6 +5,8 @@ vpc_cidr           = "10.0.0.0/16"
 internet_gateway   = "stg-igw"
 public_route_table = "stg-public-rt"
 
+default_route_cidr = "0.0.0.0/0"
+
 public_subnet_az1_name = "stg-public-subnet-az1"
 public_subnet_az1_cidr = "10.0.1.0/24"
 public_subnet_az1_az   = "eu-west-1a"
@@ -31,3 +33,15 @@ https_port = 443
 https_port_string = "443"
 ssh_port = 22
 ssh_port_string = "22"
+
+map_public_ip_on_launch = true
+ingress_cidrs = ["0.0.0.0/0"]
+egress_cidrs = ["0.0.0.0/0"]
+ssh_allowed_cidrs = ["0.0.0.0/0"]
+ami_name_filter = "amzn2-ami-hvm-*-x86_64-gp2"
+ami_virtualization = "hvm"
+ami_owners = ["amazon"]
+alb_type = "application"
+alb_internal = false
+health_check_path = "/"
+alb_protocol = "HTTP"
