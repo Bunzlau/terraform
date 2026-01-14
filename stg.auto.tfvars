@@ -1,31 +1,31 @@
-region = "eu-west-1"
 
-vpc_name           = "stg-vpc"
+
+vpc_name           = "vpc"
 vpc_cidr           = "10.0.0.0/16"
-internet_gateway   = "stg-igw"
-public_route_table = "stg-public-rt"
+internet_gateway   = "igw"
+public_route_table = "public-rt"
 
 default_route_cidr = "0.0.0.0/0"
 
-public_subnet_az1_name = "stg-public-subnet-az1"
+public_subnet_az1_name = "public-subnet-az1"
 public_subnet_az1_cidr = "10.0.1.0/24"
 public_subnet_az1_az   = "eu-west-1a"
 
-public_subnet_az2_name = "stg-public-subnet-az2"
+public_subnet_az2_name = "public-subnet-az2"
 public_subnet_az2_cidr = "10.0.2.0/24"
 public_subnet_az2_az   = "eu-west-1b"
 
-ec2_az1           = "stg-ec2-instance-az1"
-ec2_az2           = "stg-ec2-instance-az2"
+ec2_az1           = "ec2-instance-az1"
+ec2_az2           = "ec2-instance-az2"
 ec2_instance_type = "t3.micro"
 ec2_key_name      = "ha-key"
 ec2_security_group = "stg-ec2-sg"
 
-alb_name            = "stg-ha-lb"
-alb_security_group  = "stg-alb-sg"
-tg_name             = "stg-lb-tg"
-tg                  = "stg-alb-target-group"
-target_group_name   = "stg-tg"
+alb_name            = "ha-lb"
+alb_security_group  = "alb-sg"
+tg_name             = "lb-tg"
+tg                  = "alb-target-group"
+target_group_name   = "tg"
 
 http_port = 80
 http_port_string = "80"
@@ -45,3 +45,9 @@ alb_type = "application"
 alb_internal = false
 health_check_path = "/"
 alb_protocol = "HTTP"
+
+
+############################################
+project_name = "ha-terraform-aws"
+region = "eu-west-1"
+environment = "stg"

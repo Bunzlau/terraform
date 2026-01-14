@@ -1,35 +1,35 @@
 region = "eu-west-1"
 
-vpc_name = "demo-vpc"
-internet_gateway = "demo-igw"
+vpc_name = "vpc"
+internet_gateway = "igw"
 vpc_cidr = "10.0.0.0/16"
-public_route_table = "demo-public-rt"
+public_route_table = "public-rt"
 
 default_route_cidr = "0.0.0.0/0"
 
 environment = "dev"
 
-public_subnet_az1_name = "demo-public-az1"
+public_subnet_az1_name = "public-az1"
 public_subnet_az1_cidr = "10.0.1.0/24"
 public_subnet_az1_az = "eu-west-1a"
 
-public_subnet_az2_name = "demo-public-az2"
+public_subnet_az2_name = "public-az2"
 public_subnet_az2_cidr = "10.0.2.0/24"
 public_subnet_az2_az = "eu-west-1b"
 
-ec2_az1 = "demo-ec2-az1"
-ec2_az2 = "demo-ec2-az2"
+ec2_az1 = "ec2-az1"
+ec2_az2 = "ec2-az2"
 
 ec2_instance_type = "t3.micro"
 ec2_key_name = "your-ssh-key-name"
 
-ec2_security_group = "demo-ec2-sg"
-alb_name = "demo-alb"
-alb_security_group = "demo-alb-sg"
+ec2_security_group = "ec2-sg"
+alb_name = "alb"
+alb_security_group = "alb-sg"
 
-tg_name = "demo-tg"
-tg = "demo-tg-tag"
-target_group_name = "demo-tg"
+tg_name = "tg"
+tg = "tg-tag"
+target_group_name = "tg"
 
 http_port = 80
 http_port_string = "80"
@@ -51,3 +51,8 @@ alb_type = "application"
 alb_internal = false
 health_check_path = "/"
 alb_protocol = "HTTP"
+
+############################################
+project_name = "ha-terraform-aws"
+region = "eu-west-1"
+environment = "stg"

@@ -1,3 +1,13 @@
+locals {
+    alb_name = "${var.environment}-${var.alb_name}"
+    tg_name = "${var.environment}-${var.target_group_name}"
+
+    common_tags = {
+        Project     = var.project_name
+        Environment = var.environment
+    }
+}
+
 resource "aws_security_group" "alb_sg" {
   name        =  var.alb_security_group
   description = "Allow HTTP inbound traffic"

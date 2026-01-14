@@ -1,3 +1,12 @@
+locals {
+    alb_name = "${var.environment}-${var.alb_name}"
+    tg_name = "${var.environment}-${var.target_group_name}"
+
+    common_tags = {
+        Project     = var.project_name
+        Environment = var.environment
+    }
+}
 resource "aws_lb" "alb" {
   name = var.alb_name
   load_balancer_type = var.alb_type
@@ -9,6 +18,10 @@ resource "aws_lb" "alb" {
     aws_subnet.public_az2.id]
 
   security_groups = [aws_security_group.alb_sg.id]
+
+    tags = merge(local.common_tags, {
+        Name = local.alb_name
+    })
 }
 
 resource "aws_lb_listener" "http" {
@@ -21,5 +34,4 @@ resource "aws_lb_listener" "http" {
     type = "forward"
     target_group_arn = aws_lb_target_group.tg.arn
   }
-
 }
