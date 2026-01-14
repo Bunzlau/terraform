@@ -2,7 +2,7 @@ locals {
     ec2_name_z1 = "${var.environment}-${var.ec2_az1}"
     ec2_name_z2 = "${var.environment}-${var.ec2_az2}"
 
-    common_tags = {
+    common_tags_ec2 = {
         Project     = var.project_name
         Environment = var.environment
     }
@@ -34,7 +34,7 @@ vpc_security_group_ids = [
 aws_security_group.ec2_sg.id
 ]
 
-tags = merge(local.common_tags, {
+tags = merge(local.common_tags_ec2, {
 Name = local.ec2_name_z1
 })
 }

@@ -1,7 +1,8 @@
 locals  {
   vpc_name = "${var.environment}-${var.vpc_name}"
   internet_gateway = "${var.environment}-${var.internet_gateway}"
-  common_tags = {
+
+  common_tags_vpc = {
     Project     = var.project_name
     Environment = var.environment
   }
@@ -19,7 +20,7 @@ resource "aws_vpc" "main" {
 resource "aws_internet_gateway" "gw" {
   vpc_id = aws_vpc.main.id
 
-  tags = merge(local.common_tags, {
+  tags = merge(local.common_tags_vpc, {
     Name = local.internet_gateway
   })
 }

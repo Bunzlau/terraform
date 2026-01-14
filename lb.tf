@@ -1,8 +1,8 @@
 locals {
-    alb_name = "${var.environment}-${var.alb_name}"
+    alb_name_lb = "${var.environment}-${var.alb_name}"
     tg_name = "${var.environment}-${var.target_group_name}"
 
-    common_tags = {
+    common_tags_tf = {
         Project     = var.project_name
         Environment = var.environment
     }
@@ -19,8 +19,8 @@ resource "aws_lb" "alb" {
 
   security_groups = [aws_security_group.alb_sg.id]
 
-    tags = merge(local.common_tags, {
-        Name = local.alb_name
+    tags = merge(local.common_tags_tf, {
+        Name = local.alb_name_lb
     })
 }
 
