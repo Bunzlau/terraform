@@ -60,21 +60,6 @@ resource "aws_security_group" "ec2_sg" {
   }
 }
 
-resource "aws_lb_target_group" "tg" {
-  name = var.tg_name
-  port = var.http_port
-  protocol = var.alb_protocol
-  vpc_id = aws_vpc.main.id
-
-  health_check {
-    path = var.health_check_path
-    port = var.http_port_string
-  }
-
-  tags = {
-    Name = var.tg
-  }
-}
 
 resource "aws_lb_target_group_attachment" "az1" {
   target_group_arn = aws_lb_target_group.tg.arn
