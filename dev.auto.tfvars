@@ -1,4 +1,3 @@
-region = "eu-west-1"
 
 vpc_name = "vpc"
 internet_gateway = "igw"
@@ -55,4 +54,3 @@ alb_protocol = "HTTP"
 ############################################
 project_name = "ha-terraform-aws"
 region = "eu-west-1"
-environment = "stg"

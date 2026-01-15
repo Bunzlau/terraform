@@ -1,8 +1,7 @@
 locals {
-    alb_name = "${var.environment}-${var.alb_name}"
-    tg_name = "${var.environment}-${var.target_group_name}"
+    alb_name_sg = "${var.environment}-${var.alb_security_group}"
 
-    common_tags = {
+    common_tags_sg = {
         Project     = var.project_name
         Environment = var.environment
     }
@@ -26,6 +25,9 @@ resource "aws_security_group" "alb_sg" {
     protocol  = "-1"
     cidr_blocks = var.egress_cidrs
   }
+  tags = merge(local.common_tags_sg,{
+    Name = local.alb_name_sg
+  })
 }
 
 resource "aws_security_group" "ec2_sg" {
