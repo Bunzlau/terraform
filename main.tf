@@ -1,8 +1,46 @@
-
-
-//pobieramy najnowszy Amazon Linux 2 AMI w regionie
-//znajdzie najnowsze Amazon Linux 2 / unikamy r?cznego wpisywania AMI ID
-
-
+module "" {
+  source = ""
+  alb_internal = false
+  alb_name = ""
+  alb_protocol = ""
+  alb_security_group = ""
+  alb_type = ""
+  ami_name_filter = ""
+  ami_owners = []
+  ami_virtualization = ""
+  default_route_cidr = ""
+  ec2_az1 = ""
+  ec2_az2 = ""
+  ec2_instance_type = ""
+  ec2_key_name = ""
+  ec2_security_group = ""
+  egress_cidrs = []
+  environment = ""
+  health_check_path = ""
+  http_port = 0
+  http_port_string = ""
+  https_port = 0
+  https_port_string = ""
+  ingress_cidrs = []
+  internet_gateway = ""
+  map_public_ip_on_launch = false
+  project_name = ""
+  public_route_table = ""
+  public_subnet_az1_az = ""
+  public_subnet_az1_cidr = ""
+  public_subnet_az1_name = ""
+  public_subnet_az2_az = ""
+  public_subnet_az2_cidr = ""
+  public_subnet_az2_name = ""
+  region = ""
+  ssh_allowed_cidrs = []
+  ssh_port = 0
+  ssh_port_string = ""
+  target_group_name = ""
+  tg = ""
+  tg_name = ""
+  vpc_cidr = ""
+  vpc_name = ""
+}
 
 
