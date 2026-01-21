@@ -10,14 +10,9 @@ locals {
 resource "aws_lb" "alb" {
   name = var.alb_name
   load_balancer_type = var.alb_type
-  //internal znaczy czy ALB bedzie mial publiczny IP czy nie
   internal = var.alb_internal
-
-  subnets = [
-    aws_subnet.public_az1.id,
-    aws_subnet.public_az2.id]
-
-  security_groups = [aws_security_group.alb_sg.id]
+  subnets = var.subnet_ids
+  security_groups = var.security_group_ids
 
     tags = merge(local.common_tags_tf, {
         Name = local.alb_name_lb
@@ -29,7 +24,6 @@ resource "aws_lb_listener" "http" {
   port = var.http_port
   protocol = var.alb_protocol
 
-  // definiujemy co ma sie stac z ruchem przychodzacym na listenera
   default_action {
     type = "forward"
     target_group_arn = aws_lb_target_group.tg.arn
@@ -37,10 +31,10 @@ resource "aws_lb_listener" "http" {
 }
 
 resource "aws_lb_target_group" "tg" {
-  name = var.tg_name
+  name = local.tg_name
   port = var.http_port
   protocol = var.alb_protocol
-  vpc_id = aws_vpc.main.id
+  vpc_id = var.vpc_id
 
   health_check {
     path = var.health_check_path

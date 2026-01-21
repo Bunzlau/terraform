@@ -10,7 +10,7 @@ locals {
 resource "aws_security_group" "alb_sg" {
   name        =  var.alb_security_group
   description = "Allow HTTP inbound traffic"
-  vpc_id      = aws_vpc.main.id
+  vpc_id      = var.vpc_id
 
   ingress {
     description = "HTTP from anywhere"
@@ -33,7 +33,7 @@ resource "aws_security_group" "alb_sg" {
 resource "aws_security_group" "ec2_sg" {
   name        =  var.ec2_security_group
   description = "Allow traffic from ALB"
-  vpc_id      = aws_vpc.main.id
+  vpc_id      = var.vpc_id
 
   ingress {
     description = "HTTP from ALB"
@@ -61,14 +61,10 @@ resource "aws_security_group" "ec2_sg" {
 }
 
 
-resource "aws_lb_target_group_attachment" "az1" {
-  target_group_arn = aws_lb_target_group.tg.arn
-  target_id        = aws_instance.ec2_az1.id
-  port             = var.http_port
-}
+resource "aws_lb_target_group_attachment" "instances" {
+  for_each = toset(var.target_instance_ids)
 
-resource "aws_lb_target_group_attachment" "az2" {
-  target_group_arn = aws_lb_target_group.tg.arn
-  target_id        = aws_instance.ec2_z2.id
+  target_group_arn = var.target_group_arn
+  target_id        = each.value
   port             = var.http_port
 }
