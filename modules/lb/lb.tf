@@ -45,3 +45,15 @@ resource "aws_lb_target_group" "tg" {
     Name = var.tg
   }
 }
+
+resource "aws_lb_target_group_attachment" "ec2_attachment_z1" {
+
+  target_group_arn = aws_lb_target_group.tg.arn
+  target_id        = var.ec2_instance_z1_id
+}
+
+resource "aws_lb_target_group_attachment" "ec2_attachment_z2" {
+
+  target_group_arn = aws_lb_target_group.tg.arn
+  target_id        = var.ec2_instance_z2_id
+}

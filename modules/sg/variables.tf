@@ -57,13 +57,3 @@ variable "vpc_id" {
   description = "VPC id where the security groups will be created"
   type        = string
 }
-
-variable "target_group_arn" {
-  description = "ARN of the ALB target group to attach EC2 instances to"
-  type        = string
-}
-
-variable "target_instance_ids" {
-  description = "List of EC2 instance IDs to attach to the target group"
-  type        = list(string)
-}

@@ -18,6 +18,7 @@ variable "target_group_name" {
   type        = string
 }
 
+
 variable "tg_name" {
   description = "(Compatibility) Target group name variable referenced directly in the module. If empty, the module's local.tg_name will be used by you to set the real name. This exists to avoid breaking the current inconsistent reference in lb.tf."
   type        = string
@@ -78,5 +79,15 @@ variable "security_group_ids" {
 
 variable "vpc_id" {
   description = "VPC id where target group and ALB live"
+  type        = string
+}
+
+variable "ec2_instance_z1_id" {
+  description = "ID of the EC2 instance in availability zone 1 to attach to the target group"
+  type        = string
+}
+
+variable "ec2_instance_z2_id" {
+  description = "ID of the EC2 instance in availability zone 2 to attach to the target group"
   type        = string
 }

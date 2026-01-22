@@ -52,3 +52,8 @@ variable "subnet_id_public_az2" {
     type        = string
     description = "Subnet ID for public subnet in AZ2 where ec2_z2 will be launched."
 }
+
+variable "ec2_security_group_ids" {
+    type        = list(string)
+    description = "List of security group IDs to associate with the EC2 instances."
+}

@@ -8,3 +8,12 @@ output "alb_arn" {
   description = "ARN of the created Application Load Balancer"
 }
 
+output "target_group_arn" {
+  value       = aws_lb_target_group.tg.arn
+  description = "ARN of the ALB target group"
+}
+
+output "target_group_name" {
+  value       = aws_lb_target_group.tg.name
+  description = "Name of the ALB target group"
+}

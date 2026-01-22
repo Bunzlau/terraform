@@ -59,12 +59,3 @@ resource "aws_security_group" "ec2_sg" {
 
   }
 }
-
-
-resource "aws_lb_target_group_attachment" "instances" {
-  for_each = toset(var.target_instance_ids)
-
-  target_group_arn = var.target_group_arn
-  target_id        = each.value
-  port             = var.http_port
-}
