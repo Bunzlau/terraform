@@ -30,6 +30,7 @@ module "ec2" {
     subnet_id_public_az1 = module.vpc.public_subnet_az1_id
     subnet_id_public_az2 = module.vpc.public_subnet_az2_id
     ec2_security_group_ids = [module.sg.ec2_sg_id]
+    http_port = var.http_port
 }
 
 module "lb" {

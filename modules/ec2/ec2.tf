@@ -32,6 +32,16 @@ resource "aws_instance" "ec2_az1" {
   # key_name = var.ec2_key_name
   vpc_security_group_ids = var.ec2_security_group_ids
 
+  // Provide AZ-specific user data from template
+  user_data = templatefile("${path.module}/user_data_az1.sh.tpl", {
+    project_name = var.project_name
+    environment  = var.environment
+    az           = var.ec2_az1
+    http_port    = var.http_port
+  })
+
+  // Only set key_name when provided
+
   tags = merge(local.common_tags_ec2, {
     Name = local.ec2_name_z1
   })
@@ -43,6 +53,15 @@ resource "aws_instance" "ec2_z2" {
   subnet_id     = var.subnet_id_public_az2
   # key_name = var.ec2_key_name
   vpc_security_group_ids = var.ec2_security_group_ids
+
+  user_data = templatefile("${path.module}/user_data_az2.sh.tpl", {
+    project_name = var.project_name
+    environment  = var.environment
+    az           = var.ec2_az2
+    http_port    = var.http_port
+  })
+
+
   tags = {
     Name = local.ec2_name_z2
   }

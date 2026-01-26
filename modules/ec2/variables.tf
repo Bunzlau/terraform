@@ -57,3 +57,9 @@ variable "ec2_security_group_ids" {
     type        = list(string)
     description = "List of security group IDs to associate with the EC2 instances."
 }
+
+variable "http_port" {
+  description = "HTTP port the instances (and target group) will use"
+  type        = number
+  default     = 80
+}
