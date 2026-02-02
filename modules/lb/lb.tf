@@ -1,3 +1,11 @@
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "5.54.1"
+    }
+  }
+}
 locals {
     alb_name_lb = "${var.environment}-${var.alb_name}"
     tg_name = "${var.environment}-${var.target_group_name}"
@@ -25,9 +33,48 @@ resource "aws_lb_listener" "http" {
   protocol = var.alb_protocol
 
   default_action {
-    type = "forward"
-    target_group_arn = aws_lb_target_group.tg.arn
+    type = "redirect"
+
+    redirect {
+      port        = "443"
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+    }
   }
+}
+
+resource "aws_lb_listener" "https" {
+    load_balancer_arn = aws_lb.alb.arn
+    port = 443
+    protocol = "HTTPS"
+    ssl_policy = "ELBSecurityPolicy-TLS-1-2-Res-PQ-2025-09"
+
+    certificate_arn = aws_acm_certificate.cert.arn
+
+    default_action {
+      type = "forward"
+      target_group_arn = aws_lb_target_group.tg.arn
+    }
+}
+
+
+resource "aws_acm_certificate" "cert" {
+  domain_name       = var.domain_name
+  validation_method = "DNS"
+
+  tags = merge(local.common_tags_tf, {
+    Name = "${var.environment}-acm-cert"
+  })
+}
+
+resource "aws_acm_certificate" "cert_www" {
+    domain_name       = var.domain_name_www
+    validation_method = "DNS"
+
+    tags = merge(local.common_tags_tf, {
+        Name = "${var.environment}-acm-cert-www"
+    })
+
 }
 
 resource "aws_lb_target_group" "tg" {

@@ -172,3 +172,23 @@ variable "environment" {
 variable "project_name" {
     type        = string
 }
+
+variable "certificate_arn" {
+  type        = string
+  description = "ARN of the SSL certificate for the main domain"
+}
+
+variable "domain_name" {
+  type        = string
+  description = "Primary domain name for the SSL certificate"
+}
+
+variable "certificate_arn_www" {
+  type        = string
+  description = "ARN of the SSL certificate for the www subdomain"
+}
+
+variable "domain_name_www" {
+  type        = string
+  description = "WWW subdomain name for the SSL certificate"
+}

@@ -52,6 +52,10 @@ module "lb" {
     vpc_id = module.vpc.vpc_id
   ec2_instance_z1_id = module.ec2.ec2_z1_id
   ec2_instance_z2_id = module.ec2.ec2_z2_id
+  domain_name = var.domain_name
+  domain_name_www = var.domain_name_www
+  certificate_arn = var.certificate_arn
+  certificate_arn_www = var.certificate_arn_www
 }
 
 module "sg" {

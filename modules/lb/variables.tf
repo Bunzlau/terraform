@@ -91,3 +91,23 @@ variable "ec2_instance_z2_id" {
   description = "ID of the EC2 instance in availability zone 2 to attach to the target group"
   type        = string
 }
+
+variable "certificate_arn" {
+  type = string
+  description = "ARN of the SSL certificate to use for HTTPS listener"
+}
+
+variable "certificate_arn_www" {
+  type = string
+  description = "ARN of the SSL certificate to use for HTTPS listener"
+}
+
+variable "domain_name" {
+  type = string
+  description = "Domain name for the ACM certificate"
+}
+
+variable "domain_name_www" {
+  type = string
+  description = "Domain name for the ACM certificate"
+}
