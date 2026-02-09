@@ -38,6 +38,10 @@ resource "aws_instance" "ec2_az1" {
     environment  = var.environment
     az           = var.ec2_az1
     http_port    = var.http_port
+    "efs_mount_point" = var.efs_mount_point
+    "efs_file_system_id" = var.efs_file_system_id
+    "efs_access_point_id" = var.efs_access_point_id
+    "region" = var.region
   })
 
   // Only set key_name when provided
@@ -59,6 +63,10 @@ resource "aws_instance" "ec2_z2" {
     environment  = var.environment
     az           = var.ec2_az2
     http_port    = var.http_port
+    "efs_mount_point" = var.efs_mount_point
+    "efs_file_system_id" = var.efs_file_system_id
+    "efs_access_point_id" = var.efs_access_point_id
+    "region" = var.region
   })
 
 

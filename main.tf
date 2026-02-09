@@ -61,7 +61,6 @@ module "lb" {
 module "sg" {
 
   source = "./modules/sg"
-
   alb_security_group = var.alb_security_group
   ec2_security_group = var.ec2_security_group
   egress_cidrs = var.egress_cidrs
@@ -72,4 +71,14 @@ module "sg" {
   ssh_allowed_cidrs = var.ssh_allowed_cidrs
   ssh_port           = var.ssh_port
   vpc_id             = module.vpc.vpc_id
+  efs_sg_id          = module.sg.efs_sg_id
+}
+
+module "efs" {
+
+  source = "./modules/efs"
+  environment = var.environment
+  project_name = var.project_name
+  subnets_ids = [module.vpc.public_subnet_az1_id, module.vpc.public_subnet_az2_id]
+  efs_sg_id = module.sg.efs_sg_id
 }

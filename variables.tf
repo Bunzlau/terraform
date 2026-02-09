@@ -192,3 +192,29 @@ variable "domain_name_www" {
   type        = string
   description = "WWW subdomain name for the SSL certificate"
 }
+
+// Add optional EFS variables at root to allow overriding or passing into modules
+variable "efs_file_system_id" {
+  type        = string
+  description = "Optional EFS file system ID to pass into modules; default empty"
+  default     = ""
+}
+
+variable "efs_access_point_id" {
+  type        = string
+  description = "Optional EFS Access Point ID to pass into modules; default empty"
+  default     = ""
+}
+
+variable "efs_mount_point" {
+  type        = string
+  description = "Optional default mount point for EFS mounts on EC2 instances"
+  default     = "/mnt/efs"
+}
+
+// Add top-level ssl_policy so we can pass an optional SSL policy to the lb module
+variable "ssl_policy" {
+  type        = string
+  description = "Optional SSL policy name to use for ALB HTTPS listener; leave empty to use provider/region default"
+  default     = ""
+}

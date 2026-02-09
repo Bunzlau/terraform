@@ -57,3 +57,8 @@ variable "vpc_id" {
   description = "VPC id where the security groups will be created"
   type        = string
 }
+
+variable "efs_sg_id" {
+    description = "ID of the EFS security group to allow NFS access"
+    type        = string
+}

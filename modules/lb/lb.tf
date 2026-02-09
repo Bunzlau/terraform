@@ -1,11 +1,3 @@
-terraform {
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "5.54.1"
-    }
-  }
-}
 locals {
     alb_name_lb = "${var.environment}-${var.alb_name}"
     tg_name = "${var.environment}-${var.target_group_name}"
@@ -47,7 +39,7 @@ resource "aws_lb_listener" "https" {
     load_balancer_arn = aws_lb.alb.arn
     port = 443
     protocol = "HTTPS"
-    ssl_policy = "ELBSecurityPolicy-TLS-1-2-Res-PQ-2025-09"
+    ssl_policy = "ELBSecurityPolicy-2016-08"
 
     certificate_arn = aws_acm_certificate.cert.arn
 

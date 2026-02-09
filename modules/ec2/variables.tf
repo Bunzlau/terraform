@@ -63,3 +63,29 @@ variable "http_port" {
   type        = number
   default     = 80
 }
+
+# Optional: region for constructing EFS mount host (used by user-data when mounting EFS)
+variable "region" {
+  type        = string
+  description = "AWS region (used by user-data when mounting EFS)"
+  default     = ""
+}
+
+# Optional EFS variables - if provided, user-data will attempt to mount EFS
+variable "efs_file_system_id" {
+  type        = string
+  description = "EFS file system ID (e.g. fs-12345678). If empty, EFS mounting is skipped."
+  default     = ""
+}
+
+variable "efs_access_point_id" {
+  type        = string
+  description = "EFS Access Point ID (e.g. fsap-12345678). Optional but preferred for access point mounts."
+  default     = ""
+}
+
+variable "efs_mount_point" {
+  type        = string
+  description = "Local mount point path on the EC2 instance where EFS will be mounted"
+  default     = "/mnt/efs"
+}
