@@ -33,7 +33,6 @@ resource "aws_efs_file_system" "efs" {
   }
 }
 
-
 resource "aws_efs_mount_target" "efs_mt" {
   count = length(var.subnets_ids)
 

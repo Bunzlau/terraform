@@ -31,6 +31,7 @@ resource "aws_instance" "ec2_az1" {
   subnet_id     = var.subnet_id_public_az1
   # key_name = var.ec2_key_name
   vpc_security_group_ids = var.ec2_security_group_ids
+  iam_instance_profile = aws_iam_instance_profile.ec2_instance_profile.name
 
   // Provide AZ-specific user data from template
   user_data = templatefile("${path.module}/user_data_az1.sh.tpl", {
@@ -38,9 +39,9 @@ resource "aws_instance" "ec2_az1" {
     environment  = var.environment
     az           = var.ec2_az1
     http_port    = var.http_port
-    "efs_mount_point" = var.efs_mount_point
-    "efs_file_system_id" = var.efs_file_system_id
-    "efs_access_point_id" = var.efs_access_point_id
+    efs_mount_point = var.efs_mount_point
+    efs_file_system_id = var.efs_file_system_id
+    efs_access_point_id = var.efs_access_point_id
     "region" = var.region
   })
 
@@ -57,20 +58,26 @@ resource "aws_instance" "ec2_z2" {
   subnet_id     = var.subnet_id_public_az2
   # key_name = var.ec2_key_name
   vpc_security_group_ids = var.ec2_security_group_ids
+  iam_instance_profile = aws_iam_instance_profile.ec2_instance_profile.name
 
   user_data = templatefile("${path.module}/user_data_az2.sh.tpl", {
     project_name = var.project_name
     environment  = var.environment
     az           = var.ec2_az2
     http_port    = var.http_port
-    "efs_mount_point" = var.efs_mount_point
-    "efs_file_system_id" = var.efs_file_system_id
-    "efs_access_point_id" = var.efs_access_point_id
+    efs_mount_point = var.efs_mount_point
+    efs_file_system_id = var.efs_file_system_id
+    efs_access_point_id = var.efs_access_point_id
     "region" = var.region
   })
-
 
   tags = {
     Name = local.ec2_name_z2
   }
+
+}
+
+resource "aws_iam_instance_profile" "ec2_instance_profile" {
+  name = "EC2-Secrets-Access-Role"
+  role = var.iam_ec2_role_name
 }

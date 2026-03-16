@@ -31,6 +31,13 @@ module "ec2" {
     subnet_id_public_az2 = module.vpc.public_subnet_az2_id
     ec2_security_group_ids = [module.sg.ec2_sg_id]
     http_port = var.http_port
+
+    # Pass region and EFS details to allow user-data to mount EFS persistently via /etc/fstab
+    region = var.region
+    efs_file_system_id   = module.efs.file_system_id
+    efs_access_point_id  = module.efs.access_point_id
+    efs_mount_point      = var.efs_mount_point
+  iam_ec2_role_name = module.iam.iam_role_name
 }
 
 module "lb" {
@@ -81,4 +88,11 @@ module "efs" {
   project_name = var.project_name
   subnets_ids = [module.vpc.public_subnet_az1_id, module.vpc.public_subnet_az2_id]
   efs_sg_id = module.sg.efs_sg_id
+}
+
+module "iam"{
+
+  source = "./modules/iam"
+  environment = var.environment
+  project_name = var.project_name
 }

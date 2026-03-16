@@ -1,8 +1,8 @@
 terraform {
   backend "s3" {
-    bucket = "terraform-bunzlau-state"
+    bucket = "terraform-bunzlau-state-v2"
     key    = "LockId"
-    region = "eu-west-1"
+    region = "eu-north-1"
 
     use_lockfile   = true
     encrypt        = true

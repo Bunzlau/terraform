@@ -56,6 +56,7 @@ variable "subnet_id_public_az2" {
 variable "ec2_security_group_ids" {
     type        = list(string)
     description = "List of security group IDs to associate with the EC2 instances."
+  sensitive = true
 }
 
 variable "http_port" {
@@ -88,4 +89,9 @@ variable "efs_mount_point" {
   type        = string
   description = "Local mount point path on the EC2 instance where EFS will be mounted"
   default     = "/mnt/efs"
+}
+
+variable "iam_ec2_role_name" {
+    type        = string
+    description = "ID of the IAM role to attach to EC2 instances (for permissions)."
 }
